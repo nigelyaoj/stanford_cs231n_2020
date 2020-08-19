@@ -1,5 +1,6 @@
 from builtins import range
 import numpy as np
+import math
 from random import shuffle
 from past.builtins import xrange
 
@@ -24,7 +25,8 @@ def softmax_loss_naive(W, X, y, reg):
     # Initialize the loss and gradient to zero.
     loss = 0.0
     dW = np.zeros_like(W)
-
+    num_train = X.shape[0]
+    num_classes = W.shape[1]
     #############################################################################
     # TODO: Compute the softmax loss and its gradient using explicit loops.     #
     # Store the loss in loss and the gradient in dW. If you are not careful     #
@@ -32,11 +34,25 @@ def softmax_loss_naive(W, X, y, reg):
     # regularization!                                                           #
     #############################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-
+    output = X.dot(W)
+    for i in range(num_train):
+        loss += - np.log(np.exp(output[i,y[i]])/np.sum(np.exp(output[i])))
+        for j in range(num_classes):
+            sum_ = np.sum(np.exp(output[i]))
+            if j != y[i]:
+                dW[:,j] += X[i] * np.exp(output[i, j])/sum_
+            else:
+                sigmod = np.exp(output[i,y[i]])/sum_
+                dW[:,j] += (-1 + sigmod) * X[i]
+    loss /= num_train
+    loss += reg * np.sum(W * W)
+    
+    dW /= num_train
+    dW += 2 *  reg * W
+    
     pass
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-
     return loss, dW
 
 
@@ -49,6 +65,9 @@ def softmax_loss_vectorized(W, X, y, reg):
     # Initialize the loss and gradient to zero.
     loss = 0.0
     dW = np.zeros_like(W)
+     
+    num_train = X.shape[0]
+    num_classes = W.shape[1]
 
     #############################################################################
     # TODO: Compute the softmax loss and its gradient using no explicit loops.  #
@@ -57,6 +76,24 @@ def softmax_loss_vectorized(W, X, y, reg):
     # regularization!                                                           #
     #############################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
+ 
+    indicator = np.zeros((num_train, num_classes))
+    for i in range(num_train):
+        indicator[i, y[i]] = 1
+   
+    output = X.dot(W)
+    loss = - sum (np.log(np.sum(np.exp(output) * indicator, axis=1) / np.sum(np.exp(output), axis=1))) / num_train
+    
+    sum_ = np.sum(np.exp(output), axis=1)
+    mat_to_sum = (np.exp(output).transpose()/sum_).transpose() - indicator
+
+
+
+    dW = X.transpose().dot(mat_to_sum)
+    dW /= num_train
+    dW += 2 * reg * W
+    
+
 
     pass
 
