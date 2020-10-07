@@ -23,8 +23,8 @@
 
   - [ ] Q5       
 
-    - [ ] PyTorch 
-  - [ ]  TensorFlow on CIFAR-10
+    - [x] PyTorch on CIFAR-10 (leave open-ended challenge not done)
+    - [ ] TensorFlow on CIFAR-10 
     
     
   
