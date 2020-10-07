@@ -21,10 +21,13 @@
 
   - [ ] Q4  Convolutional Networks
 
-  - [ ] Q5  PyTorch / TensorFlow on CIFAR-10
+  - [ ] Q5       
 
+    - [ ] PyTorch 
+  - [ ]  TensorFlow on CIFAR-10
     
-
+    
+  
 - [ ] Assigment3
 
 
